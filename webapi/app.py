@@ -1,10 +1,13 @@
 from flask import Flask
-from pathlib import Path
 from dotenv import load_dotenv
 from webapi.config import DevelopmentConfig
 
 
-load_dotenv(str(Path(__file__).parent.absolute()) +'/.env')
-
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
+
+from webapi.controllers.users import users_routes
+app.register_blueprint(users_routes, url_prefix='/api/v1/users')
+
+from webapi.controllers.errors import errors_routes
+app.register_blueprint(errors_routes)
