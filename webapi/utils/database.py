@@ -4,7 +4,6 @@ import pymongo
 
 class Database:
     def __init__(self):
-        print(os.environ.get("LOCAL_CONNECTION"))
         self.client = pymongo.MongoClient(os.environ.get("LOCAL_CONNECTION"))
         self.db = self.client.get_database(os.environ.get("DB_NAME"))
 

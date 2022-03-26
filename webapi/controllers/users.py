@@ -1,6 +1,7 @@
 from bson.objectid import ObjectId
 from webapi.utils.database import Database
 from webapi.models.users import UsersModels
+from webapi.utils import auth
 from flask import Blueprint, jsonify, request
 from webapi.utils.exceptions import ValidationError
 
@@ -37,7 +38,7 @@ class UsersRoutes:
             users_list.append(user)
 
         return jsonify({
-            'status': 'sucess',
+            'status': 'success',
             'message': 'success finding users',
             'users': users_list
         })
@@ -81,10 +82,21 @@ class UsersRoutes:
         user.update_user(id)
 
         return jsonify({
-            'status': 'sucess',
+            'status': 'success',
             'message': 'successful editing user',
         })
 
     @users_routes.route('/<id>', methods=['DELETE'])
     def delete_user(id):
         pass
+
+    @users_routes.route('/profile', methods=['GET'])
+    @auth.token_required
+    def profile(user):
+        user['_id'] = str(user['_id'])
+        del user['password']
+        return jsonify({
+            'status': 'success',
+            'message': '',
+            'user': user
+        })
